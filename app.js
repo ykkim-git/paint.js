@@ -1,15 +1,31 @@
 const canvas = document.getElementById("jsCanvas");
 const ctx = canvas.getContext("2d");
 
-/* canvas에는 프레임의 사이즈와, 
-그릴 수 있는 pixel의 사이즈를 지정해줘야함 */
-canvas.width = 700;
-canvas.height = 700;
-
 ctx.strokeStyle = "#2c2c2c;";
-ctx.lineWidth = 2.5; // 선 두께
+ctx.lineWidth = 2.5;
+
+canvas.width = 500;
+canvas.height = 500;
 
 let painting = false;
+
+const colors = document.querySelectorAll(".controls_color");
+for (let i = 0; i < colors.length; i++) {
+  colors[i].addEventListener("click", (e) => {
+    ctx.strokeStyle = e.target.style.backgroundColor;
+  });
+}
+
+const reset = document.querySelector("#reset");
+reset.addEventListener("click", (e) => {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.beginPath();
+});
+
+function onChangeRange(val) {
+  const range = val;
+  ctx.lineWidth = range;
+}
 
 function stopPainting(event) {
   painting = false;
@@ -17,6 +33,11 @@ function stopPainting(event) {
 
 function startPainting() {
   painting = true;
+}
+
+function fillPainting() {
+  painting = true;
+  ctx.fill();
 }
 
 function onMouseMove(event) {
@@ -37,22 +58,12 @@ function onMouseMove(event) {
   }
 }
 
-function onMouseDown(event) {
-  // 마우스 클릭을 하면 그리는 것을 true로 시작
+function onMouseDown() {
   painting = true;
-  console.log("mousedown(클릭 시작) : " + event);
 }
 
-/* function onMouseUp(event) {
-  // 마우스 클릭을 떼면 그리는 것을 false로 멈춤
+function onMouseLeave() {
   stopPainting();
-  console.log("mouseup(클릭 해제) : " + event);
-} */
-
-function onMouseLeave(event) {
-  // 마우스가 canvas에서 벗어나면 그리는것을 false로 멈춤
-  stopPainting();
-  console.log("마우스 벗어남 : " + event);
   painting = false;
 }
 
